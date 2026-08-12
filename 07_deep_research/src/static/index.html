@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Research AI Studio | Plan -> Research -> Evidence -> Synthesize -> Reflect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --card-bg: rgba(21, 28, 44, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; }
+
+        header { padding: 1.25rem 2rem; background: rgba(11, 15, 25, 0.85); border-bottom: 1px solid var(--card-border); display: flex; align-items: center; justify-content: space-between; }
+        .logo-group { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; }
+        .badge-model { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+        main { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+        .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+        .search-box { display: flex; gap: 0.75rem; }
+        input { flex: 1; background: #050811; border: 1px solid var(--card-border); border-radius: 10px; padding: 0.85rem 1.25rem; color: var(--text-main); font-family: inherit; font-size: 1rem; }
+        .btn-run { background: var(--accent-gradient); border: none; border-radius: 10px; padding: 0 1.5rem; color: #fff; font-weight: 700; cursor: pointer; }
+
+        .report-box { background: #050811; border: 1px solid var(--card-border); border-radius: 12px; padding: 1.5rem; font-size: 0.95rem; line-height: 1.6; color: #e2e8f0; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-group">
+            <div class="logo-icon">DEEP</div>
+            <div style="font-size: 1.25rem; font-weight: 700;">Deep Research AI Studio</div>
+        </div>
+        <div class="badge-model">Gemini 2.5 Flash Deep Research Engine Active</div>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Multi-Stage Deep Research Agent</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Decomposes topics into sub-questions, extracts peer-reviewed evidence, synthesizes report drafts, and runs reflection gap detection via Gemini 2.5 Flash.</p>
+
+            <div class="search-box">
+                <input type="text" id="topicInput" value="Next-Generation LLM Architectures and Scaling Dynamics" placeholder="Enter research topic...">
+                <button class="btn-run" onclick="runResearch()">Execute Deep Research</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Generated Research Plan</h3>
+            <div id="planBox" style="font-size: 0.9rem; color: #818cf8; line-height: 1.5;">Click Execute to generate plan...</div>
+
+            <h3 style="margin-top: 1rem;">Synthesized Deep Research Report</h3>
+            <div class="report-box" id="reportBox">Waiting for agent execution...</div>
+        </div>
+    </main>
+
+    <script>
+        async function runResearch() {
+            const topic = document.getElementById('topicInput').value.trim();
+            if (!topic) return;
+
+            document.getElementById('planBox').textContent = 'Generating research plan via Gemini 2.5 Flash...';
+            document.getElementById('reportBox').textContent = 'Collecting evidence snippets and synthesizing deep report...';
+
+            try {
+                const res = await fetch('/api/research', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ topic })
+                });
+                const data = await res.json();
+
+                document.getElementById('planBox').innerHTML = '<strong>Sub-Questions Plan:</strong><br>1. ' + data.plan.join('<br>2. ');
+                document.getElementById('reportBox').textContent = data.final_report;
+
+            } catch (err) {
+                alert('Research error: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

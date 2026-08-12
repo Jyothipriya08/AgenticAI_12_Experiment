@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Optimization AI Studio | Quantization & Latency Benchmark</title>
+    <meta name="description" content="Inference optimization lab for FP16, INT8, and INT4 precisions measuring VRAM footprint, throughput, TTFT, and quality retention.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080d18;
+            --card-bg: rgba(23, 32, 51, 0.85);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-gradient: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
+            --accent-glow: rgba(6, 182, 212, 0.25);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --code-bg: #050811;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.08) 0%, transparent 40%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        header {
+            padding: 1.25rem 2rem;
+            background: rgba(8, 13, 24, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--card-border);
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .logo-group { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: var(--accent-gradient);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: #000; box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .logo-title { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+
+        .badge-live {
+            background: rgba(6, 182, 212, 0.15); color: #22d3ee;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 0.35rem 0.75rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .badge-live::before {
+            content: ''; width: 8px; height: 8px; border-radius: 50%;
+            background-color: #22d3ee; box-shadow: 0 0 10px #22d3ee;
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+
+        main {
+            max-width: 1200px; margin: 1.5rem auto; padding: 0 1.5rem; width: 100%; flex: 1;
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+
+        .metrics-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+        }
+        @media (max-width: 768px) { .metrics-grid { grid-template-columns: 1fr; } }
+
+        .metric-card {
+            background: var(--card-bg); backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border); border-radius: 14px; padding: 1.25rem;
+            display: flex; flex-direction: column; gap: 0.4rem;
+        }
+        .metric-title { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+        .metric-value { font-size: 1.75rem; font-weight: 700; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .metric-sub { font-size: 0.8rem; color: var(--text-muted); }
+
+        .card {
+            background: var(--card-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border); border-radius: 16px; padding: 1.75rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; gap: 1.25rem;
+        }
+
+        .card-header h2 { font-size: 1.4rem; font-weight: 600; margin-bottom: 0.4rem; }
+        .card-header p { color: var(--text-muted); font-size: 0.95rem; }
+
+        .btn-run {
+            background: var(--accent-gradient); border: none; border-radius: 12px;
+            padding: 0.85rem 1.75rem; color: #040914; font-weight: 700; font-size: 1rem; cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease; align-self: flex-start;
+        }
+        .btn-run:hover { transform: translateY(-2px); box-shadow: 0 4px 20px var(--accent-glow); }
+
+        .table-wrapper { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid var(--card-border); }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; }
+        th { background: rgba(255, 255, 255, 0.04); padding: 0.85rem 1rem; color: var(--text-muted); font-weight: 600; border-bottom: 1px solid var(--card-border); }
+        td { padding: 0.85rem 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.03); color: var(--text-main); }
+        tr:hover td { background: rgba(255, 255, 255, 0.02); }
+
+        .report-box {
+            background: var(--code-bg); border: 1px solid var(--card-border); border-radius: 12px;
+            padding: 1.25rem; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem;
+            color: #22d3ee; white-space: pre-wrap; line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-group">
+            <div class="logo-icon">OPT</div>
+            <div class="logo-title">Model Optimization AI Studio</div>
+        </div>
+        <div class="badge-live">Gemini 2.5 Flash Optimizer Active</div>
+    </header>
+
+    <main>
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">Max VRAM Savings</div>
+                <div id="metricVRAM" class="metric-value">-71.9%</div>
+                <div class="metric-sub">16.0 GB down to 4.5 GB (INT4)</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Throughput Speedup</div>
+                <div id="metricSpeedup" class="metric-value">2.29x</div>
+                <div class="metric-sub">38.5 up to 88.2 tok/s</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">Quality Retention</div>
+                <div id="metricQuality" class="metric-value">98.6%</div>
+                <div class="metric-sub">INT8 Production Precision</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2>Model Quantization & Inference Benchmark</h2>
+                <p>Evaluates FP16, INT8, and INT4 precisions on VRAM footprint, TTFT latency, throughput (tok/s), and perplexity shift.</p>
+            </div>
+            <button class="btn-run" onclick="runOptimization()">Run Optimization Benchmark</button>
+        </div>
+
+        <div class="card">
+            <h3>Precision Comparison Matrix</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Precision Level</th>
+                            <th>VRAM (GB)</th>
+                            <th>TTFT Latency (ms)</th>
+                            <th>Throughput (tok/s)</th>
+                            <th>Perplexity</th>
+                            <th>Quality Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr><td colspan="6" style="text-align:center; color: var(--text-muted);">Running optimization benchmark...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin-top: 1rem;">Gemini 2.5 Flash Engineering Trade-Off Report</h3>
+            <div class="report-box" id="reportBox">Executing trade-off analysis...</div>
+        </div>
+    </main>
+
+    <script>
+        async function runOptimization() {
+            try {
+                const res = await fetch('/api/run-optimization', { method: 'POST' });
+                const data = await res.json();
+
+                const tbody = document.getElementById('tableBody');
+                tbody.innerHTML = '';
+                data.results.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="font-weight:600; color:#22d3ee;">${r.precision}</td>
+                        <td>${r.vram_gb} GB</td>
+                        <td>${r.latency_ttft_ms} ms</td>
+                        <td style="color:#34d399; font-weight:600;">${r.throughput_tok_per_sec} tok/s</td>
+                        <td>${r.perplexity}</td>
+                        <td style="font-weight:600;">${r.quality_score}%</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById('reportBox').textContent = data.report;
+            } catch (err) {
+                console.error(err);
+                document.getElementById('reportBox').textContent = 'API Error: ' + err.message;
+            }
+        }
+
+        runOptimization();
+    </script>
+</body>
+</html>

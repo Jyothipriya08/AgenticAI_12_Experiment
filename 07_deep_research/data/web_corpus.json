@@ -1,0 +1,17 @@
+[
+    {
+        "url": "https://tech-insights.org/ai-scaling-laws",
+        "title": "Empirical Analysis of LLM Scaling Laws",
+        "snippet": "Compute scaling correlates directly with downstream benchmarks up to 10^25 FLOPs. Beyond that, data quality becomes the primary bottleneck."
+    },
+    {
+        "url": "https://arxiv-summary.io/agentic-reasoning",
+        "title": "Agentic Workflows vs Zero-Shot Reasoning",
+        "snippet": "Multi-agent reflection loops increase accuracy on complex mathematical and coding tasks by 34% compared to single-pass prompting."
+    },
+    {
+        "url": "https://enterprise-ai.com/hardware-efficiency",
+        "title": "Hardware Trends in AI Accelerator Chips",
+        "snippet": "FP8 and INT4 quantization lower GPU VRAM requirements by up to 75% without significant degradation in perplexity for 70B parameter models."
+    }
+]

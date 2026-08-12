@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Agent SDR AI Studio | Autonomous Lead Prospecting Pipeline</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --card-bg: rgba(21, 28, 44, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-gradient: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; }
+
+        header { padding: 1.25rem 2rem; background: rgba(11, 15, 25, 0.85); border-bottom: 1px solid var(--card-border); display: flex; align-items: center; justify-content: space-between; }
+        .logo-group { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; }
+        .badge-model { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+        main { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+        .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+        .lead-buttons { display: flex; gap: 0.75rem; }
+        .btn-lead { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--card-border); border-radius: 10px; padding: 0.65rem 1.2rem; color: var(--text-main); font-weight: 600; cursor: pointer; }
+        .btn-lead:hover { background: rgba(236, 72, 153, 0.2); border-color: #ec4899; }
+
+        .agents-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        @media (max-width: 768px) { .agents-grid { grid-template-columns: 1fr; } }
+
+        .agent-box { background: #050811; border: 1px solid var(--card-border); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .agent-title { font-size: 0.85rem; color: #f472b6; font-weight: 600; text-transform: uppercase; }
+        .agent-content { font-size: 0.9rem; color: var(--text-main); white-space: pre-wrap; line-height: 1.5; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-group">
+            <div class="logo-icon">SDR</div>
+            <div style="font-size: 1.25rem; font-weight: 700;">Multi-Agent SDR AI Studio</div>
+        </div>
+        <div class="badge-model">Gemini 2.5 Flash Autonomous SDR Pipeline</div>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Multi-Agent Prospecting & Cold Outreach Pipeline</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Select a lead to run the multi-agent system (Lead Discovery -> ICP Qualification -> Personalization -> Email Copywriting -> Human Approval Gate).</p>
+
+            <div class="lead-buttons">
+                <button class="btn-lead" onclick="processLead('L101')">Process Lead L101 (Nexus FinTech)</button>
+                <button class="btn-lead" onclick="processLead('L102')">Process Lead L102 (GreenLeaf Logistics)</button>
+                <button class="btn-lead" onclick="processLead('L103')">Process Lead L103 (CloudScale Systems)</button>
+            </div>
+        </div>
+
+        <div class="agents-grid">
+            <div class="agent-box">
+                <div class="agent-title">Agent 1: Lead Discovery & ICP Qualification</div>
+                <div class="agent-content" id="agentQual">Select lead above to start pipeline...</div>
+            </div>
+            <div class="agent-box">
+                <div class="agent-title">Agent 2: Gemini Personalization Specialist</div>
+                <div class="agent-content" id="agentPersona">Waiting...</div>
+            </div>
+            <div class="agent-box" style="grid-column: span 2;">
+                <div class="agent-title">Agent 3: Gemini Cold Email Copywriter</div>
+                <div class="agent-content" id="agentEmail" style="font-family: 'JetBrains Mono', monospace;">Waiting...</div>
+            </div>
+            <div class="agent-box" style="grid-column: span 2; border-color: #10b981;">
+                <div class="agent-title" style="color: #34d399;">Agent 4: Human Approval Safety Gate</div>
+                <div class="agent-content" id="agentGate" style="font-weight: 600;">Waiting...</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function processLead(leadId) {
+            document.getElementById('agentQual').textContent = 'Processing lead discovery & qualification...';
+            document.getElementById('agentPersona').textContent = 'Generating personalized hooks with Gemini 2.5 Flash...';
+            document.getElementById('agentEmail').textContent = 'Drafting cold email outreach...';
+            document.getElementById('agentGate').textContent = 'Evaluating approval gate...';
+
+            try {
+                const res = await fetch('/api/process-lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ lead_id: leadId, auto_approve: true })
+                });
+                const data = await res.json();
+
+                if (data.status === 'DISQUALIFIED') {
+                    document.getElementById('agentQual').textContent = `Status: DISQUALIFIED\nScore: ${data.qualification.score}/100\nReason: ${data.message}`;
+                    document.getElementById('agentPersona').textContent = 'N/A';
+                    document.getElementById('agentEmail').textContent = 'N/A';
+                    document.getElementById('agentGate').textContent = 'N/A';
+                    return;
+                }
+
+                document.getElementById('agentQual').textContent = `ICP Score: ${data.qualification.score}/100\nReason: ${data.qualification.qualification_reason}`;
+                document.getElementById('agentPersona').textContent = `Personalized Hook:\n"${data.personalization.personalized_hook}"\n\nTarget Pain Point:\n${data.personalization.target_pain_point}`;
+                document.getElementById('agentEmail').textContent = `Subject: ${data.email_draft.subject}\n\n${data.email_draft.body}`;
+                document.getElementById('agentGate').textContent = `Approval Status: ${data.approval_gate.status}\nAction: ${data.approval_gate.action}`;
+
+            } catch (err) {
+                alert('SDR error: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

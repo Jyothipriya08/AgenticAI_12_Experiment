@@ -1,0 +1,20 @@
+[
+    {
+        "id": "P001",
+        "category": "Math",
+        "question": "A store sells apples for $2 each and oranges for $3 each. If Alice buys 4 apples and 5 oranges with a $50 bill, how much change should she receive?",
+        "expected_answer": "$27"
+    },
+    {
+        "id": "P002",
+        "category": "Logic",
+        "question": "If all Bloops are Razzies and all Razzies are Lazzies, are all Bloops definitely Lazzies?",
+        "expected_answer": "Yes"
+    },
+    {
+        "id": "P003",
+        "category": "Coding",
+        "question": "What is the time complexity of binary search on a sorted array of size N?",
+        "expected_answer": "O(log N)"
+    }
+]

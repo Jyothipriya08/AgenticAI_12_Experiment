@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capstone End-to-End Agentic AI Studio | Master Orchestrator System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --card-bg: rgba(21, 28, 44, 0.75);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --accent-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Outfit', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; }
+
+        header { padding: 1.25rem 2rem; background: rgba(11, 15, 25, 0.85); border-bottom: 1px solid var(--card-border); display: flex; align-items: center; justify-content: space-between; }
+        .logo-group { display: flex; align-items: center; gap: 0.75rem; }
+        .logo-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; }
+        .badge-model { background: rgba(0, 242, 254, 0.15); color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.3); padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+
+        main { max-width: 1100px; margin: 2rem auto; padding: 0 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+        .card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+
+        .search-box { display: flex; gap: 0.75rem; }
+        input { flex: 1; background: #050811; border: 1px solid var(--card-border); border-radius: 10px; padding: 0.85rem 1.25rem; color: var(--text-main); font-family: inherit; font-size: 1rem; }
+        .btn-run { background: var(--accent-gradient); border: none; border-radius: 10px; padding: 0 1.5rem; color: #000; font-weight: 700; cursor: pointer; }
+
+        .summary-box { background: #050811; border: 1px solid var(--card-border); border-radius: 12px; padding: 1.25rem; font-size: 0.95rem; line-height: 1.6; color: #f1f5f9; white-space: pre-wrap; }
+        .trace-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.8rem; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-group">
+            <div class="logo-icon">CAP</div>
+            <div style="font-size: 1.25rem; font-weight: 700;">Capstone Master Agentic AI Studio</div>
+        </div>
+        <div class="badge-model">Gemini 2.5 Flash Master Agent Active</div>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>End-to-End Multi-Agent Master Orchestrator System</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">Integrates RAG Knowledge Layer, Tool Execution, Multi-Agent Specialist Delegation, Safety Guardrail Gates, and Real-Time Observability Tracing via Gemini 2.5 Flash.</p>
+
+            <div class="search-box">
+                <input type="text" id="queryInput" value="Show all customers located in USA" placeholder="Enter query for master orchestrator...">
+                <button class="btn-run" onclick="runCapstone()">Execute Capstone Workflow</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Master Agent Execution Summary</h3>
+            <div class="summary-box" id="summaryBox">Click Execute Capstone Workflow...</div>
+
+            <h3 style="margin-top: 1rem;">Observability Execution Trace</h3>
+            <div id="traceList" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <div class="trace-card">Observability traces will appear here...</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function runCapstone() {
+            const query = document.getElementById('queryInput').value.trim();
+            if (!query) return;
+
+            try {
+                const res = await fetch('/api/run-capstone', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                const data = await res.json();
+
+                document.getElementById('summaryBox').textContent = data.final_answer;
+
+                const traceBox = document.getElementById('traceList');
+                traceBox.innerHTML = '';
+                data.trace.forEach(t => {
+                    const div = document.createElement('div');
+                    div.className = 'trace-card';
+                    div.textContent = `[${t.node}] Action: ${t.action} | Details: ${JSON.stringify(t.details)} | Latency: ${t.latency_ms}ms`;
+                    traceBox.appendChild(div);
+                });
+
+            } catch (err) {
+                alert('Capstone error: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>

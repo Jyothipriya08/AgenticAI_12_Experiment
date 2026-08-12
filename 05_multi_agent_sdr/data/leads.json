@@ -1,0 +1,32 @@
+[
+    {
+        "lead_id": "L101",
+        "company": "Nexus Financial Tech",
+        "contact_name": "Sarah Connor",
+        "title": "VP of Engineering",
+        "industry": "FinTech",
+        "company_size": 250,
+        "tech_stack": ["Python", "AWS", "PostgreSQL"],
+        "recent_news": "Raised $30M Series B to scale real-time fraud detection pipeline"
+    },
+    {
+        "lead_id": "L102",
+        "company": "GreenLeaf Logistics",
+        "contact_name": "Mark Vance",
+        "title": "Head of Operations",
+        "industry": "Logistics",
+        "company_size": 45,
+        "tech_stack": ["PHP", "MySQL"],
+        "recent_news": "Expanding regional distribution centers across the Midwest"
+    },
+    {
+        "lead_id": "L103",
+        "company": "CloudScale Systems",
+        "contact_name": "Elena Rostova",
+        "title": "CTO",
+        "industry": "Cloud Infrastructure",
+        "company_size": 500,
+        "tech_stack": ["Kubernetes", "Go", "GCP"],
+        "recent_news": "Launched automated Kubernetes cost management tool"
+    }
+]

@@ -1,0 +1,23 @@
+[
+    {
+        "image_id": "IMG_001",
+        "filename": "chart_sales_2023.jpg",
+        "tags": ["chart", "sales", "revenue", "bar graph"],
+        "description": "Bar chart displaying monthly enterprise sales revenue for Q1-Q4 2023.",
+        "extracted_text": "Q1: $1.2M, Q2: $1.5M, Q3: $1.8M, Q4: $2.4M. Total: $6.9M"
+    },
+    {
+        "image_id": "IMG_002",
+        "filename": "architecture_diagram.png",
+        "tags": ["diagram", "architecture", "aws", "microservices"],
+        "description": "System architecture diagram illustrating API Gateway, Lambda workers, and DynamoDB.",
+        "extracted_text": "Client -> API Gateway -> Lambda -> DynamoDB cluster"
+    },
+    {
+        "image_id": "IMG_003",
+        "filename": "product_packaging.jpg",
+        "tags": ["product", "hardware", "iot", "smart hub"],
+        "description": "Product packaging photo of Acme Smart Home Hub v2 with serial number SN-99823.",
+        "extracted_text": "Acme Smart Home Hub v2. Model: SHH-200. Serial: SN-99823."
+    }
+]
